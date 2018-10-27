@@ -1,0 +1,159 @@
+  
+ 
+ 
+ 
+ 
+ 
+ 
+the only reason it is a custom script is to save space so it's not dublicated with bear and bull
+ 
+  
+  
+  script Gilmore {
+        input t1 = 0.0;
+        input t2 = 0.0;
+        input t3 = 0.0;
+        input t4 = 0.0;
+        input t5 = 0.0;
+        input p1 = 0.0;
+        input p2 = 0.0;
+        input p3 = 0.0;
+        input p4 = 0.0;
+        input p5 = 0.0;
+        input waveline = 0.0;
+        input tolerance = 0.0;
+        def d1 = if t1 then 0 else d1[1] + 1;
+        def d2 = if t2 then 0 else d2[1] + 1;
+        def d3 = if t3 then 0 else d3[1] + 1;
+        def d4 = if t4 then 0 else d4[1] + 1;
+        def d5 = if t5 then 0 else d5[1] + 1;
+    ###first
+        def timeXtoA = if t2 then d1 else timeXtoA[1];
+        def timeXtoB = if t3 then d1 else timeXtoB[1];
+        def timeXtoC = if t4 then d1 else timeXtoC[1];
+        def timeXtoD = if t5 then d1 else timeXtoD[1];
+        def timeAtoB = if t3 then d2 else timeAtoB[1];
+        def timeAtoC = if t4 then d2 else timeAtoC[1];
+        def timeAtoD = if t5 then d2 else timeAtoD[1];
+        def timeBtoC = if t4 then d3 else timeBtoC[1];
+        def timeBtoD = if t5 then d3 else timeBtoD[1];
+        def timeCtoD = if t5 then d4 else timeCtoD[1];
+    ##Primaries
+        def TimeCDAB = (AbsValue(timeCtoD) / AbsValue(timeAtoB));###alternates  ## add to falsebreakbuy
+        def TimeBCXA = (AbsValue(timeBtoC) / AbsValue(timeXtoA));###alternates 
+      
+    
+      
+        def TimeReverseCross = (AbsValue(timeAtoD ) / AbsValue(timeBtoC));##  Reversecross
+        def TimeFalseB = (AbsValue(timeAtoD ) / AbsValue(timeBtoC));##  false break
+        def TimeDoubleCross = (AbsValue(timeAtoD ) / AbsValue(timeXtoC));##  Doublecross
+        def TimeInsideCross = (AbsValue(timeAtoD ) / AbsValue(timeCtoD));##  Inside Cross      ## add to falsebreakbuy
+        def TimeOutsideCross = (AbsValue(timeAtoD ) / AbsValue(timeBtoD));##  outside Cross direct relations
+        def DirectStructureXABBD = (AbsValue(timeBtoD ) / AbsValue(timeXtoB));##  total
+        def DirectStructureBCCD = (AbsValue(timeCtoD ) / AbsValue(timeBtoc));##  total /2
+        def priceDirectStructureBCCD = (AbsValue(p5-p4 ) / AbsValue(p4-p3));## 
+        def PriceCDAB = (AbsValue(p5 - p3) / AbsValue(p2 - p3));###alternates
+        def PriceBCXA = (AbsValue(p4 - p3) / AbsValue(p2 - p1));###alternates  
+      def PriceBCXA1 = (AbsValue(p5) / AbsValue(p2));###            ##1:1 balancing
+        def PriceReverseCross = (AbsValue(p5 - p2 ) / AbsValue(p4 - p3));##  Reversecros
+        def TimeFalseBPrice = (AbsValue(timeAtoD ) / AbsValue(p4 - p3));##  false break
+        def PriceDoubleCross = (AbsValue(p5 - p2 ) / AbsValue(p4 - p1));##  Doublecross
+        def PriceInsideCross = (AbsValue(p5 - p2 ) / AbsValue(p4 - p5));##  Inside Cross  ## add to falsebreakbuy
+        def PriceOutsideCross = (AbsValue(p5 - p2 ) / AbsValue(p5 - p3));##  outside Cross direct relations  ## add to falsebreakbuy
+       def PriceRetraceXCBC = (AbsValue(p5 - p4 ) / AbsValue(p4 - p1));##  retrace1
+    def PriceRetraceXAAC = (AbsValue(p5 - p2 ) / AbsValue(p2 - p1));##  retrace2
+  
+        def PriceRetraceBCD = (AbsValue(p5 - p4 ) / AbsValue(p4 - p3));##  retrace2
+         def PriceRetraceXCD = (AbsValue(p5 - p4 ) / AbsValue(p4 - p1));##  retrace2
+    #########################  Ratios finished  measure below
+    def balanceBCXAratio = if PriceBCXA >= (1 - tolerance) && PriceBCXA<= (1 + tolerance) then 1 else 0;  ##1:1 balancing
+    def balanceBCXAratio2 = if PriceBCXA >= (.50 - tolerance) && PriceBCXA<= (.50 + tolerance) or PriceBCXA >= (.618 - tolerance) && PriceBCXA<= (.618 + tolerance) then 1 else 0;  ##1:1 balancing
+        def CDABTratio = if TimeCDAB >= (1 - tolerance) && TimeCDAB <= (1 + tolerance) then 1 else 0;##1:1 balancing
+        def CDABPratio = if PriceCDAB >= (1 - tolerance) && PriceCDAB <= (1 + tolerance) then 1 else 0;
+      def FBCDABTratio = if TimeCDAB >= (1 - tolerance) && TimeCDAB <= (1 + tolerance) or TimeCDAB >= (1.27 - tolerance) && TimeCDAB <= (1.27 + tolerance)then 1 else 0;  ##1:1 balancing
+        def FBCDABPratio = if PriceCDAB >= (1 - tolerance) && PriceCDAB <= (1 + tolerance) or PriceCDAB >= (1.27 - tolerance) && PriceCDAB <= (1.27 + tolerance)  then 1 else 0;
+        def BCXATratio = if TimeBCXA >= (1 - tolerance) && TimeBCXA <= (1 + tolerance) then 1 else 0;
+        def BCXAPratio = if PriceBCXA1 >= (1 - tolerance) && PriceBCXA1 <= (1 + tolerance) then 1 else 0;
+        def XBBDratio = if DirectStructureXABBD >= (1 - tolerance) && DirectStructureXABBD <= (1 + tolerance) then 1 else 0;
+        def BCCDratio = if DirectStructureBCCD >= (.50 - tolerance) && DirectStructureBCCD <= (.50 + tolerance) then 1 else 0;
+    def BCCDratio2 = if DirectStructureBCCD >= (.382 - tolerance) && DirectStructureBCCD <= (.382 + tolerance) or DirectStructureBCCD >= (.50 - tolerance) && DirectStructureBCCD <= (.50 + tolerance) or DirectStructureBCCD >= (.618 - tolerance) && DirectStructureBCCD <= (.618 + tolerance) then 1 else 0;
+    
+    def BCCDratio3 = if DirectStructureBCCD >= (.382 - tolerance) && DirectStructureBCCD <= (.382 + tolerance) or
+      DirectStructureBCCD >= (.50 - tolerance) && DirectStructureBCCD <= (.50 + tolerance) or
+      DirectStructureBCCD >= (.618 - tolerance) && DirectStructureBCCD <= (.618 + tolerance) or
+    DirectStructureBCCD >= (1 - tolerance) && DirectStructureBCCD <= (1 + tolerance) or
+    DirectStructureBCCD >= (1.272 - tolerance) && DirectStructureBCCD <= (1.272 + tolerance) or
+    DirectStructureBCCD >= (1.414 - tolerance) && DirectStructureBCCD <= (1.414 + tolerance) or
+    DirectStructureBCCD >= (1.618 - tolerance) && DirectStructureBCCD <= (1.618 + tolerance) or
+    DirectStructureBCCD >= (1.732 - tolerance) && DirectStructureBCCD <= (1.732 + tolerance) or
+    DirectStructureBCCD >= (2 - tolerance) && DirectStructureBCCD <= (2 + tolerance) or
+    DirectStructureBCCD >= (2.618 - tolerance) && DirectStructureBCCD <= (2.618 + tolerance) or
+    DirectStructureBCCD >= (3 - tolerance) && DirectStructureBCCD <= (3+ tolerance)
+    then 1 else 0;
+        def BCCDratioP = if priceDirectStructureBCCD >= (.50 - tolerance) && priceDirectStructureBCCD <= (.50 + tolerance) then 1 else 0;
+        def RVTratio1 = if TimeReverseCross >= (1 - tolerance) && TimeReverseCross <= (1 + tolerance) or
+                    TimeReverseCross >= (1.272 - tolerance) && TimeReverseCross <= (1.272 + tolerance) then 1 else 0;
+        def RVTratio = if TimeReverseCross >= (1.27 - tolerance) && TimeReverseCross <= (1.27 + tolerance) or
+                    TimeReverseCross >= (1.618 - tolerance) && TimeReverseCross <= (1.618 + tolerance) or
+                    TimeReverseCross >= (2.00 - tolerance) && TimeReverseCross <= (2.00 + tolerance) or
+                    TimeReverseCross >= (2.23 - tolerance) && TimeReverseCross <= (2.23 + tolerance) or
+                    TimeReverseCross >= (2.618 - tolerance) && TimeReverseCross <= (2.618 + tolerance) or
+                    TimeReverseCross >= (3 - tolerance) && TimeReverseCross <= (3 + tolerance) 
+                                                                                            then 1 else 0;
+        def RVPratio = if PriceReverseCross >= (1 - tolerance) && PriceReverseCross <= (1 + tolerance) then 1 else 0;
+        def FBTratioT = if TimeFalseB >= (.50 - tolerance) && TimeFalseB  <= (.50 + tolerance)
+                  or TimeFalseB >= (.618 - tolerance) && TimeFalseB  <= (.618 + tolerance)
+                  or TimeFalseB  >= (.707 - tolerance) && TimeFalseB <= (.707 + tolerance)
+                  or TimeFalseB  >= (.786 - tolerance) && TimeFalseB  <= (.786 + tolerance) or
+                    TimeFalseB  >= (1 - tolerance) && TimeFalseB  <= (1 + tolerance)
+                                                                                    then 1 else 0;
+        def FBTratioP = if  TimeFalseBPrice >= (.50 - tolerance) && TimeFalseBPrice <= (.50 + tolerance) or
+                        TimeFalseBPrice  >= (.618 - tolerance) && TimeFalseBPrice <= (.618 + tolerance) or 
+                    TimeFalseBPrice  >= (.707 - tolerance) && TimeFalseBPrice  <= (.707 + tolerance) or
+                    TimeFalseBPrice >= (.787 - tolerance) && TimeFalseBPrice  <= (.787 + tolerance)
+                                                                                        then 1 else 0;
+        def DoublecrossTratio = if TimeDoubleCross >= (1 - tolerance) && TimeDoubleCross <= (1 + tolerance) then 1 else 0;
+        def DoublecrossPratio = if PriceDoubleCross >= (1 - tolerance) && PriceDoubleCross <= (1 + tolerance) then 1 else 0;
+        def InsidecrossTratio = if TimeInsideCross >= (.50 - tolerance) && TimeInsideCross <= (.50 + tolerance) or 
+                      TimeInsideCross  >= (.618 - tolerance) && TimeInsideCross <= (.618 + tolerance) or 
+                            TimeInsideCross  >= (.707 - tolerance) && TimeInsideCross  <= (.707 + tolerance) or
+                                TimeInsideCross >= (.787 - tolerance) && TimeInsideCross  <= (.787 + tolerance)  then 1 else 0;
+    
+        def InsidecrossPratio = if PriceInsideCross >= (.50 - tolerance) && PriceInsideCross <= (.50 + tolerance) or
+                            PriceInsideCross  >= (.618 - tolerance) && PriceInsideCross <= (.618 + tolerance) or 
+                              PriceInsideCross  >= (.707 - tolerance) && PriceInsideCross  <= (.707 + tolerance) or
+                                PriceInsideCross >= (.787 - tolerance) && PriceInsideCross  <= (.787 + tolerance)  then 1  else 0;
+        def InsidecrossDiagonal = if TimeInsideCross >= (1 - tolerance) && TimeInsideCross <= (1 + tolerance) then 1  else 0;
+        def OutsidecrossTratio = if TimeInsideCross >= (1 - tolerance) && TimeInsideCross <= (1 + tolerance) then 1 else 0;
+        def OutsidecrossPratio = if PriceOutsideCross >= (1 - tolerance) && PriceOutsideCross <= (1 + tolerance) then 1 else 0;
+        def Retrace12 = if PriceRetraceXCBC==.382 or PriceRetraceXCBC==.50 or PriceRetraceXCBC==.618 or PriceRetraceXAAC==.382 or PriceRetraceXAAC==.50 or PriceRetraceXAAC==.618 then 1 else 0;
+        def Retrace3 = if PriceRetraceXCD==.382 or PriceRetraceXCD==.50 or PriceRetraceXCD==.618 or PriceRetraceXAAC==.382 or PriceRetraceXAAC==.50 or PriceRetraceXAAC==.618 then 1 else 0;
+    def Retrace4 = if PriceRetraceXAAC==.382 or PriceRetraceXAAC==.50 or PriceRetraceXAAC==.618 then 1 else 0;
+    def Retrace5 = if PriceRetraceXCD==.382 or PriceRetraceXCD==.50 or PriceRetraceXCD==.618  then 1 else 0;
+      def ADBCPratio = if PriceInsideCross >= (1.618 - tolerance) && PriceInsideCross <= (1.618 + tolerance) or
+                            PriceInsideCross  >= (2 - tolerance) && PriceInsideCross <= (2 + tolerance) or 
+                              PriceInsideCross  >= (2.618 - tolerance) && PriceInsideCross  <= (2.618 + tolerance) or
+                                PriceInsideCross >= (3 - tolerance) && PriceInsideCross  <= (3 + tolerance)  then 1  else 0;
+        def alternate1 = if  (CDABTratio or CDABPratio)  then 1 else 0;
+        def alternate2 = if ( BCXATratio or  BCXAPratio ) then 1 else 0; 
+        def RVcross = if (RVTratio or  RVPratio)  then 1 else 0;
+        def fibFB  = if (FBTratioT or FBTratioP ) then 1 else 0;
+        def Dcross = if (DoublecrossTratio or  DoublecrossPratio) then 1 else 0;
+        def INcross = if (InsidecrossTratio or  InsidecrossPratio)  then 1 else 0;
+        def outcross = if (OutsidecrossTratio or  OutsidecrossPratio)  then 1 else 0;
+        def XtoDstructure = if (XBBDratio)  then 1 else 0;
+
+    def strongbuy1 = if (CDABTratio  and BCXAPratio ) then 1 else 0 ;
+    def strongbuy2 = if (CDABTratio  and balanceBCXAratio2 or balanceBCXAratio) then 1 else 0 ;
+    def strongbuy3 = if (CDABTratio and balanceBCXAratio and Retrace3 and BCCDratio2) then 1 else 0 ;
+    def strongbuy4 = if (CDABTratio and (balanceBCXAratio2 or balanceBCXAratio or BCCDratio3) and Retrace3) then 1 else 0 ;
+    def strongbuy5 = if (CDABTratio and RVTratio1 and  Retrace5 or Retrace4) then 1 else 0 ; ##falsebreakbuy
+    def strongbuy6 = if (CDABTratio and RVTratio1 and  BCCDratio and XBBDratio) then 1 else 0 ;
+        def strongbuy =  if((alternate1 or alternate2) and RVcross or fibFB or Dcross or INcross or outcross or XtoDstructure or XBBDratio) then 1 else 0;
+        def buyprob90precenta = if Retrace12 and (alternate1 or alternate2) then 1 else 0;
+        def buyprob90percentb = if RVcross and (alternate1 or alternate2) then 1 else 0;
+        def buy70percent = if ((BCCDratio or BCCDratioP or CDABTratio ) and (RVcross or fibFB or Dcross or INcross or outcross or XtoDstructure or  alternate1 or         alternate2 or xbbdratio)) then 1 else 0;
+    def falsebreakbuy =if((FBCDABTratio or FBCDABPratio) and TimeInsideCross and Retrace12) then 1 else 0;
+        plot totalstructure = if XBBDratio then waveline else Double.NaN;
+
+    }
